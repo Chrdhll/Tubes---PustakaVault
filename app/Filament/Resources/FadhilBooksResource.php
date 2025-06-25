@@ -41,10 +41,7 @@ class FadhilBooksResource extends Resource
                 Forms\Components\TextInput::make('publisher')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Textarea::make('blurb')
-                    ->maxLength(255)
-                    ->default(null)
-                    ->rows(3),
+                Forms\Components\Textarea::make('blurb'),
                 Forms\Components\TextInput::make('stock')
                     ->required()
                     ->numeric()
@@ -77,8 +74,7 @@ class FadhilBooksResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('publisher')
                     ->searchable(),
-                // Tables\Columns\TextColumn::make('blurb')
-                //     ->searchable(),
+                // Tables\Columns\TextColumn::make('blurb'),
                 Tables\Columns\TextColumn::make('stock')
                     ->numeric()
                     ->sortable(),
@@ -132,3 +128,4 @@ class FadhilBooksResource extends Resource
         ];
     }
 }
+

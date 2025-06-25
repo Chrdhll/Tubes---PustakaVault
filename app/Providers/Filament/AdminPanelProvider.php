@@ -70,11 +70,11 @@ class AdminPanelProvider extends PanelProvider
 
     public function boot()
     {
-        Filament::serving(function () {
-            if (!Auth::check() || Auth::user()->role !== 'admin') {
-                abort(403);
-            }
-        });
+        // Filament::serving(function () {
+        //     if (!Auth::check() || Auth::user()->role !== 'admin') {
+        //         abort(403);
+        //     }
+        // });
     }
 }
 
