@@ -22,8 +22,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrapFive();
-        
-        View::share('primaryColor', '#4B0082'); 
+
+        View::share('primaryColor', '#4B0082');
         View::share('secondaryColor', '#F7EDFF');
         View::share('blackColor', '#191919');
     }

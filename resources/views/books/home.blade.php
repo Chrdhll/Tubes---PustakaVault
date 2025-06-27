@@ -67,7 +67,7 @@
                                     data-id="{{ $book->id }}">
                                     <i class="bi bi-info-circle me-1"></i> Detail
                                 </button>
-                                <a href="{{ route('books.borrow', $book->id) }}"
+                                <a href="{{ route('loans.borrow', $book->id) }}"
                                     class="btn text-white btn-sm flex-grow-1 {{ $book->stock <= 0 ? 'disabled' : '' }}"
                                     style="background-color: var(--primary-color);">
                                     <i class="bi bi-bookmark-plus me-1"></i> Pinjam

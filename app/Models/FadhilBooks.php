@@ -20,7 +20,7 @@ class FadhilBooks extends Model
         'category_id',
     ];
 
-     protected static function booted()
+    protected static function booted()
     {
         static::deleting(function ($book) {
             if ($book->image && Storage::disk('public')->exists($book->image)) {
@@ -32,5 +32,17 @@ class FadhilBooks extends Model
     public function category()
     {
         return $this->belongsTo(FadhilCategory::class, 'category_id');
+    }
+
+    // Satu Buku bisa memiliki banyak peminjaman (loans)
+    public function loans()
+    {
+        return $this->hasMany(FadhilLoan::class);
+    }
+
+    // Satu Buku bisa memiliki banyak ulasan (reviews)
+    public function reviews()
+    {
+        return $this->hasMany(FadhilReview::class);
     }
 }

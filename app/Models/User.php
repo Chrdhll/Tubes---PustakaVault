@@ -46,4 +46,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function loans()
+    {
+        return $this->hasMany(FadhilLoan::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(FadhilReview::class);
+    }
 }

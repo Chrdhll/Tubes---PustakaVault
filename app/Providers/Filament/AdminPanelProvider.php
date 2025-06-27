@@ -75,6 +75,6 @@ class AdminPanelProvider extends PanelProvider
         //         abort(403);
         //     }
         // });
+
     }
 }
-

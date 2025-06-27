@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class FadhilLoan extends Model
 {
+    use HasFactory;
+    
     protected $table = 'fadhil_loans';
 
     protected $fillable = [
@@ -21,9 +24,9 @@ class FadhilLoan extends Model
         return $this->belongsTo(FadhilBooks::class, 'book_id');
     }
 
-    public function member()
+    public function user()
     {
-        return $this->belongsTo(FadhilMember::class, 'member_id');
+        return $this->belongsTo(User::class);
     }
     
 }

@@ -15,7 +15,7 @@
             <div class="col-lg-3 col-md-4 col-sm-6">
                 <div class="category-card h-100">
                     <a href="{{ route('books.category', $category->id) }}" class="text-decoration-none">
-                        <div class="card border-0 shadow-sm rounded-3 overflow-hidden h-100 hover-effect">
+                        <div class="card border-1 shadow-sm rounded-3 overflow-hidden h-100 hover-effect">
                             <div class="card-body text-center p-4 d-flex flex-column justify-content-center">
                                 <div class="icon-wrapper mb-3 mx-auto" style="width: 60px; height: 60px;">
                                     <i class="fas fa-book-open fa-2x" style="color: var(--primary-color);"></i>
