@@ -24,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useBootstrapFive();
 
         View::share('primaryColor', '#4B0082');
-        View::share('secondaryColor', '#F7EDFF');
+        View::share('secondaryColor', '#E6D8F3');
         View::share('blackColor', '#191919');
     }
 }

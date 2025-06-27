@@ -11,12 +11,12 @@
 
         {{-- Search Form --}}
         <form action="{{ route('books.search') }}" method="GET" class="d-flex justify-content-center mb-5">
-            <div class="input-group" style="max-width: 800px; box-shadow: 0 4px 4px rgba(134, 134, 134, 0.1);">
+            <div class="input-group" style="max-width: 500px; box-shadow: 0 4px 4px rgba(134, 134, 134, 0.1);">
                 <input type="text" name="query" class="form-control ps-4 py-2"
                     placeholder="Cari judul, penulis, atau kategori..." value="{{ request('query') }}">
                 <button type="submit" class="btn text-white"
                     style="background-color: var(--primary-color); box-shadow: 0 4px 4px rgba(134, 134, 134, 0.1);">
-                    <i class="bi bi-search"></i> Search
+                    <i class="bi bi-search"></i> Cari
                 </button>
             </div>
         </form>
@@ -30,7 +30,8 @@
                             style="max-width: 150px; object-fit: cover; height: 100%;">
                         <div class="card-body d-flex flex-column justify-content-between">
                             <div>
-                                <h5 class="card-title" style="font-weight: 550; color: var(--black-color);">{{ $book->title }}</h5>
+                                <h5 class="card-title" style="font-weight: 550; color: var(--black-color);">
+                                    {{ $book->title }}</h5>
 
                                 {{-- Info Buku --}}
                                 <div class="d-flex flex-column gap-1 small text-muted mb-2">
@@ -67,11 +68,14 @@
                                     data-id="{{ $book->id }}">
                                     <i class="bi bi-info-circle me-1"></i> Detail
                                 </button>
-                                <a href="{{ route('loans.borrow', $book->id) }}"
-                                    class="btn text-white btn-sm flex-grow-1 {{ $book->stock <= 0 ? 'disabled' : '' }}"
-                                    style="background-color: var(--primary-color);">
-                                    <i class="bi bi-bookmark-plus me-1"></i> Pinjam
-                                </a>
+                                <form action="{{ route('loans.borrow', $book->id) }}" method="POST" class="flex-grow-1">
+                                    @csrf
+                                    <button type="submit"
+                                        class="btn text-white btn-sm w-100 {{ $book->stock <= 0 ? 'disabled' : '' }}"
+                                        style="background-color: var(--primary-color);">
+                                        <i class="bi bi-bookmark-plus me-1"></i> Pinjam
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -94,7 +98,8 @@
             <div class="modal-content">
                 <div class="modal-header" style="background-color: var(--primary-color); color: white;">
                     <h5 class="modal-title">Detail Buku</h5>
-                    <button type="button" class="btn-close" style="background-color: white; color: red;" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                    <button type="button" class="btn-close" style="background-color: white; color: red;"
+                        data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
                 <div class="modal-body" id="modalContent" style="max-height: calc(100vh - 200px); overflow-y: auto;">
                     Loading...

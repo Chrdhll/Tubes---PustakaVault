@@ -11,43 +11,21 @@ use Carbon\Carbon;
 
 class LoanController extends Controller
 {
-    public function index()
+    public function store(Request $request, FadhilBooks $book)
     {
-        $member = FadhilMember::where('user_id', Auth::id())->first();
-
-        if (!$member) {
-            return redirect()->route('books.index')->with('error', 'Anda belum terdaftar sebagai member.');
+        if ($book->stock <= 0) {
+            return redirect()->back()->with('error', 'Maaf, stok buku ini sudah habis!');
         }
 
-        $loans = FadhilLoan::with(['book', 'member'])
-            ->where('member_id')
-            ->get();
+        $loan = new FadhilLoan();
+        $loan->book_id = $book->id;
+        $loan->user_id = Auth::id();
+        $loan->loan_date = now();
 
-        return view('loans.index', compact('loans'));
-    }
-
-    public function borrow(FadhilBooks $book)
-    {
-        if ($book->stock < 1) {
-            return back()->with('error', 'Stok buku habis.');
-        }
-
-        $member = FadhilMember::where('user_id', Auth::id())->first();
-
-        if (!$member) {
-            return back()->with('error', 'Anda belum terdaftar sebagai member.');
-        }
-
-        FadhilLoan::create([
-            'book_id' => $book->id,
-            // 'member_id' => $member->id,
-            'loan_date' => Carbon::now(),
-            'return_date' => null,
-            'status' => 'borrowed',
-        ]);
+        $loan->save();
 
         $book->decrement('stock');
 
-        return redirect()->route('loans.index')->with('success', 'Berhasil meminjam buku.');
+        return redirect()->back()->with('success', 'Buku berhasil dipinjam!');
     }
 }

@@ -9,17 +9,12 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- jQuery (required for AJAX and Bootstrap 4) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Bootstrap JS -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 
     <style>
         :root {
             --primary-color: {{ $primaryColor ?? '#4B0082' }};
-            --secondary-color: {{ $secondaryColor ?? '#F7EDFF' }};
+            --secondary-color: {{ $secondaryColor ?? '#E6D8F3' }};
             --black-color: {{ $blackColor ?? '#191919' }};
         }
 
@@ -94,7 +89,7 @@
         }
 
         footer {
-            box-shadow: 0px -4px 4px rgba(134, 134, 134, 0.2);
+            box-shadow: 0px -4px 4px rgba(134, 134, 134, 0.1);
             background: var(--secondary-color);
             color: var(--primary-color);
             text-align: center;
@@ -117,24 +112,80 @@
                     style="font-size: 1.5rem; font-weight: bold; color: var(--primary-color);">PustakaVault</a>
             </div>
             <div>
-                <a href="/" class="{{ Request::is('/*') ? 'active' : '' }}">Buku</a>
+                <a href="/" class="{{ Request::is('/') ? 'active' : '' }}">Buku</a>
                 <a href="/categories" class="{{ Request::is('categories*') ? 'active' : '' }}">Kategori</a>
                 <a href="/borrowings" class="{{ Request::is('borrowings*') ? 'active' : '' }}">Pinjam Buku</a>
-
             </div>
-            <div class="auth-buttons">
-                <a href="/login" class="sign-in">Sign In</a>
-                <a href="/register" class="sign-up text-white">Sign Up</a>
+
+            <div class="auth-buttons d-flex align-items-center gap-1">
+
+                @guest
+                    <a href="{{ route('login') }}" class="sign-in">Masuk</a>
+                    <a href="{{ route('register') }}" class="sign-up text-white">Daftar</a>
+                @endguest
+
+                @auth
+                    <div class="dropdown">
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=random&color=fff"
+                            alt="User Avatar" class="rounded-circle" style="width: 40px; height: 40px;" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <h6 class="dropdown-header text-center">
+                                    <strong>{{ Auth::user()->name }}</strong>
+                                    <div class="small text-muted">{{ Auth::user()->email }}</div>
+                                </h6>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user-circle me-2"></i> Profil
+                                    Saya</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-history me-2"></i> Riwayat
+                                    Pinjaman</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <form action="{{ route('logout') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin keluar?')">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item text-danger">
+                                        <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                @endauth
+
             </div>
         </div>
     </nav>
 
-    <div class="mt-8">
-        @yield('content')
-    </div>
+    <main class="mt-8">
 
-    <footer class="py-2">
-        copyright &copy; 2025 by fadhil
+        {{-- notifikasi success  --}}
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        {{-- notifikasi error  --}}
+        @if (session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        @yield('content')
+    </main>
+
+    <footer class="py-3">
+        copyright &copy; PustakaVault. All rights reserved.
     </footer>
 
     {{-- Bootstrap JS --}}
