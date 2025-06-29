@@ -9,4 +9,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateFadhilCategory extends CreateRecord
 {
     protected static string $resource = FadhilCategoryResource::class;
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

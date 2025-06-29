@@ -9,4 +9,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateFadhilLoan extends CreateRecord
 {
     protected static string $resource = FadhilLoanResource::class;
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

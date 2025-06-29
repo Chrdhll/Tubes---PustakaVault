@@ -20,7 +20,7 @@ class FadhilBooksResource extends Resource
 {
     protected static ?string $model = FadhilBooks::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-book-open';   
+    protected static ?string $navigationIcon = 'heroicon-o-book-open';
 
     protected static ?string $navigationLabel = 'Books';
 
@@ -41,7 +41,9 @@ class FadhilBooksResource extends Resource
                 Forms\Components\TextInput::make('publisher')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Textarea::make('blurb'),
+                Forms\Components\Textarea::make('blurb')
+                    ->rows(10)
+                    ->cols(20),
                 Forms\Components\TextInput::make('stock')
                     ->required()
                     ->numeric()
@@ -78,16 +80,16 @@ class FadhilBooksResource extends Resource
                 Tables\Columns\TextColumn::make('stock')
                     ->numeric()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('year'),
+                Tables\Columns\TextColumn::make('category.name')
+                    ->label('Category')
+                    ->sortable(),
                 Tables\Columns\ImageColumn::make('image')
                     ->disk('public')
                     ->defaultImageUrl(url('/placeholder.jpg'))
                     ->circular()
                     ->label('Cover')
                     ->visibility('public'),
-                Tables\Columns\TextColumn::make('year'),
-                Tables\Columns\TextColumn::make('category.name')
-                    ->label('Category')
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -105,6 +107,7 @@ class FadhilBooksResource extends Resource
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\ViewAction::make(),
             ])
+            ->defaultSort('created_at', 'desc')
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
@@ -128,4 +131,3 @@ class FadhilBooksResource extends Resource
         ];
     }
 }
-

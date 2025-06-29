@@ -9,4 +9,10 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateFadhilBooks extends CreateRecord
 {
     protected static string $resource = FadhilBooksResource::class;
+
+    //redirect to index
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

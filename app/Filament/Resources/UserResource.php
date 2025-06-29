@@ -26,6 +26,11 @@ class UserResource extends Resource
 
     public static ?string $label = 'User';
 
+     public static function getNavigationSort(): ?int
+    {
+        return 4;
+    }
+
 
     public static function form(Form $form): Form
     {
@@ -37,7 +42,10 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
+                    ->unique(ignoreRecord: true)
                     ->maxLength(255),
+                Forms\Components\TextInput::make('phone_number')
+                    ->maxLength(15),
                 Forms\Components\TextInput::make('password')
                     ->password()
                     ->required()
@@ -56,6 +64,8 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('phone_number')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

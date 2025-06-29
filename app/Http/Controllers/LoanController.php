@@ -11,6 +11,29 @@ use Carbon\Carbon;
 
 class LoanController extends Controller
 {
+
+
+    public function index()
+    {
+        $loans = FadhilLoan::where('user_id', Auth::id())
+            ->with('book')
+            ->latest()
+            ->get();
+
+        return view('loans.index', ['loans' => $loans]);
+    }
+
+    public function create(FadhilBooks $book)
+    {
+        // Pengecekan stok lagi untuk keamanan
+        if ($book->stock <= 0) {
+            return redirect()->back()->with('error', 'Maaf, stok buku untuk dipinjam sudah habis!');
+        }
+
+        // Tampilkan view 'pinjam.konfirmasi' dan kirim data buku ke sana
+        return view('loans.konfirmasi', ['book' => $book]);
+    }
+
     public function store(Request $request, FadhilBooks $book)
     {
         if ($book->stock <= 0) {
@@ -26,6 +49,23 @@ class LoanController extends Controller
 
         $book->decrement('stock');
 
-        return redirect()->back()->with('success', 'Buku berhasil dipinjam!');
+        $message = "Buku '{$book->title}' berhasil dipinjam! Anda bisa melihatnya di daftar ini.";
+
+        return redirect()->route('pinjam.index')->with('success', $message);
+    }
+
+    public function update(Request $request, FadhilLoan $loan)
+    {
+        if (Auth::id() !== $loan->user_id) {
+            abort(403, 'AKSES DITOLAK'); // Hentikan proses jika bukan pemilik
+        }
+
+        $loan->status = 'returned';
+        $loan->return_date = now(); // Catat tanggal kembali adalah hari ini
+        $loan->save();
+
+        $loan->book->increment('stock');
+
+        return redirect()->route('pinjam.index')->with('success', 'Buku berhasil dikembalikan. Terima kasih!');
     }
 }

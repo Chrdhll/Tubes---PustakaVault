@@ -11,6 +11,13 @@ class FadhilReview extends Model
 
     protected $table = 'fadhil_reviews';
 
+    protected $fillable = [
+        'user_id',
+        'book_id',
+        'rating',
+        'comment',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -20,10 +20,12 @@ Route::get('/categories', [CategoryController::class, 'index'])->name('categorie
 Route::get('/categories/{id}', [CategoryController::class, 'show'])->name('books.category');
 
 Route::middleware('auth')->group(function () {
-    
-    // Route untuk memproses peminjaman buku
-    Route::post('/borrowings/{book}', [LoanController::class, 'store'])->name('loans.borrow');
+    Route::get('/pinjaman-saya', [LoanController::class, 'index'])->name('pinjam.index');
 
+    Route::get('/pinjam/{book}/konfirmasi', [LoanController::class, 'create'])->name('pinjam.create');
+
+    Route::post('/borrowings/{book}', [LoanController::class, 'store'])->name('loans.borrow');
+    Route::put('/pinjaman-saya/{loan}/kembalikan', [LoanController::class, 'update'])->name('pinjam.return');
 });
 
 Route::get('/login', [LoginController::class, 'create'])->name('login');

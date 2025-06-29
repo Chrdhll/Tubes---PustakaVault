@@ -61,21 +61,18 @@
 
                             {{-- Tombol --}}
                             <div class="mt-3 d-flex gap-2">
-                                <button class="btn btn-outline-indigo btn-sm btn-detail flex-grow-1"
+                                <button class="btn btn-outline-indigo btn-sm btn-detail flex-grow-1 w-100"
                                     style="border-color: var(--primary-color); transition: all 0.3s;"
                                     onmouseover="this.style.backgroundColor = 'var(--primary-color)'; this.style.color = 'white';"
                                     onmouseout="this.style.backgroundColor = 'white'; this.style.color = 'var(--primary-color)';"
                                     data-id="{{ $book->id }}">
                                     <i class="bi bi-info-circle me-1"></i> Detail
                                 </button>
-                                <form action="{{ route('loans.borrow', $book->id) }}" method="POST" class="flex-grow-1">
-                                    @csrf
-                                    <button type="submit"
-                                        class="btn text-white btn-sm w-100 {{ $book->stock <= 0 ? 'disabled' : '' }}"
-                                        style="background-color: var(--primary-color);">
-                                        <i class="bi bi-bookmark-plus me-1"></i> Pinjam
-                                    </button>
-                                </form>
+                                <a href="{{ route('pinjam.create', $book) }}"
+                                    class="btn text-white btn-sm w-100 {{ $book->stock <= 0 ? 'disabled' : '' }}"
+                                    style="background-color: var(--primary-color);">
+                                    <i class="bi bi-bookmark-plus me-1"></i> Pinjam
+                                </a>
                             </div>
                         </div>
                     </div>
