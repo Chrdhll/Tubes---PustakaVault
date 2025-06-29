@@ -36,6 +36,16 @@ class LoanController extends Controller
 
     public function store(Request $request, FadhilBooks $book)
     {
+
+        $existingLoan = FadhilLoan::where('user_id', Auth::id())
+            ->where('book_id', $book->id)
+            ->where('status', 'borrowed')
+            ->exists();
+
+        if ($existingLoan) {
+            return redirect()->back()->with('error', 'Anda sudah meminjam buku ini dan belum mengembalikannya.');
+        }
+        
         if ($book->stock <= 0) {
             return redirect()->back()->with('error', 'Maaf, stok buku ini sudah habis!');
         }

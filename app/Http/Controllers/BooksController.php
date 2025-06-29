@@ -14,13 +14,23 @@ class BooksController extends Controller
         return view('books.home', compact('books'));
     }
 
+
     public function search(Request $request)
     {
-        $query = $request->query('query');
-        $books = FadhilBooks::where('title', 'like', "%$query%")
-            ->orWhere('author', 'like', "%$query%")
-            ->paginate(6);
-        return view('books.home', compact('books'));
+    $searchTerm = $request->query('query');
+
+    $books = FadhilBooks::with('category') 
+        ->where(function ($q) use ($searchTerm) {
+            $q->where('title', 'like', "%$searchTerm%")
+              ->orWhere('author', 'like', "%$searchTerm%")
+              ->orWhereHas('category', function ($subQ) use ($searchTerm) {
+                  $subQ->where('name', 'like', "%$searchTerm%");
+              });
+        })
+        ->latest() 
+        ->paginate(6); 
+
+    return view('books.home', compact('books'));
     }
 
 
