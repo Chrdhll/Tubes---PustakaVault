@@ -17,7 +17,7 @@ class FadhilLoanResource extends Resource
 {
     protected static ?string $model = FadhilLoan::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-arrow-path';
+    protected static ?string $navigationIcon = 'heroicon-o-inbox-arrow-down';
 
     protected static ?string $navigationLabel = 'Loans';
 
@@ -25,32 +25,27 @@ class FadhilLoanResource extends Resource
 
     public static ?string $label = 'Loan';
 
-    public static function getNavigationSort(): ?int
-    {
-        return 2;
-    }
-
-
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('book_id')
-                    ->relationship('book', 'title')
-                    ->required(),
-                Forms\Components\TextInput::make('member_id')
-                    ->relationship('member', 'name')
-                    ->required(),
+                    ->required()
+                    ->numeric(),
+                Forms\Components\TextInput::make('user_id')
+                    ->required()
+                    ->numeric(),
                 Forms\Components\DatePicker::make('loan_date')
                     ->required(),
-                Forms\Components\DatePicker::make('return_date'),
-                Forms\Components\Select::make('status')
-                    ->options([
-                        'borrowed' => 'Borrowed',
-                        'returned' => 'Returned',
-                    ])
-                    ->default('borrowed')
+                Forms\Components\DatePicker::make('due_date')
                     ->required(),
+                Forms\Components\DatePicker::make('return_date'),
+                Forms\Components\TextInput::make('status')
+                    ->required(),
+                Forms\Components\TextInput::make('fine_amount')
+                    ->required()
+                    ->numeric()
+                    ->default(0.00),
             ]);
     }
 
@@ -61,16 +56,22 @@ class FadhilLoanResource extends Resource
                 Tables\Columns\TextColumn::make('book_id')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('member_id')
+                Tables\Columns\TextColumn::make('user_id')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('loan_date')
+                    ->date()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('due_date')
                     ->date()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('return_date')
                     ->date()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status'),
+                Tables\Columns\TextColumn::make('fine_amount')
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -85,7 +86,6 @@ class FadhilLoanResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

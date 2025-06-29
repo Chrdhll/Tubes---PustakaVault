@@ -24,21 +24,22 @@
                                 </thead>
                                 <tbody>
                                     @forelse ($loans as $loan)
-                                        <tr>
+                                        <tr class="{{ $loan->is_overdue ? 'table-danger' : '' }}">
                                             <th scope="row">{{ $loop->iteration }}</th>
                                             <td>
                                                 <img src="{{ asset('storage/' . $loan->book->image) }}" alt="Cover"
                                                     width="50" class="rounded">
                                             </td>
-                                            <td>{{ $loan->book->title }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($loan->loan_date)->format('d M Y') }}</td>
                                             <td>
-                                                @if ($loan->return_date)
-                                                    {{ \Carbon\Carbon::parse($loan->return_date)->format('d M Y') }}
-                                                @else
-                                                    -
+                                                {{ $loan->book->title }}
+                                                {{-- Tampilkan badge jika terlambat --}}
+                                                @if ($loan->is_overdue)
+                                                    <span class="badge bg-danger ms-2">Terlambat</span>
                                                 @endif
                                             </td>
+                                            <td>{{ \Carbon\Carbon::parse($loan->loan_date)->format('d M Y') }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($loan->due_date)->format('d M Y') }}</td>
+                                            {{-- Tampilkan Due Date --}}
                                             <td>
                                                 @if ($loan->status == 'borrowed')
                                                     <span class="badge bg-warning text-dark">Dipinjam</span>
@@ -48,7 +49,15 @@
                                             </td>
                                             <td>
                                                 @if ($loan->status == 'borrowed')
-                                                    <form action="{{ route('pinjam.return', $loan) }}" method="POST">
+                                                    {{-- Tampilkan Denda jika ada --}}
+                                                    @if ($loan->is_overdue)
+                                                        <div class="text-danger fw-bold mb-2">
+                                                            Rp {{ number_format($loan->current_fine, 0, ',', '.') }}
+                                                        </div>
+                                                    @endif
+
+                                                    <form action="{{ route('pinjam.return', $loan) }}" method="POST"
+                                                       >
                                                         @csrf
                                                         @method('PUT')
                                                         <button type="submit"

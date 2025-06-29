@@ -44,7 +44,7 @@ class LoanController extends Controller
         $loan->book_id = $book->id;
         $loan->user_id = Auth::id();
         $loan->loan_date = now();
-
+        $loan->due_date = now()->addDays(14);
         $loan->save();
 
         $book->decrement('stock');
