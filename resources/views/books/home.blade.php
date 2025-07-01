@@ -68,7 +68,7 @@
                                     data-id="{{ $book->id }}">
                                     <i class="bi bi-info-circle me-1"></i> Detail
                                 </button>
-                                @if (Auth::check() && auth()->user()->role === 'member')
+                                @if (!Auth::check() || Auth::user()->role !== 'admin')
                                 <a href="{{ route('pinjam.create', $book) }}"
                                     class="btn text-white btn-sm w-100 {{ $book->stock <= 0 ? 'disabled' : '' }}"
                                     style="background-color: var(--primary-color);">

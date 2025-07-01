@@ -11,6 +11,10 @@ class ProfileController extends Controller
 {
     public function edit()
     {
+        if (Auth::user()->role !== 'member') {
+            abort(403, 'AKSI TIDAK DIIZINKAN.');
+        }
+
         $user = Auth::user();
         return view('profile.edit', compact('user'));
     }
@@ -18,6 +22,10 @@ class ProfileController extends Controller
 
     public function update(Request $request)
     {
+        if (Auth::user()->role !== 'member') {
+            abort(403, 'AKSI TIDAK DIIZINKAN.');
+        }
+
         $user = Auth::user();
 
         $request->validate([
@@ -36,6 +44,10 @@ class ProfileController extends Controller
 
     public function updatePassword(Request $request)
     {
+        if (Auth::user()->role !== 'member') {
+            abort(403, 'AKSI TIDAK DIIZINKAN.');
+        }
+        
         $user = Auth::user();
 
         $request->validate([

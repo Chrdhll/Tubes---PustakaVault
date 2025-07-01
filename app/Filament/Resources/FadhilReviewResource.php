@@ -52,11 +52,13 @@ class FadhilReviewResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user_id')
+                Tables\Columns\TextColumn::make('user.name')
+                    ->label('User Name')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('book_id')
+                Tables\Columns\TextColumn::make('book.title')
                     ->numeric()
+                    ->label('Book Title')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('rating')
                     ->numeric()

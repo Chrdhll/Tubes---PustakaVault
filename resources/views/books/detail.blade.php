@@ -12,7 +12,7 @@
             <li><strong>Tahun:</strong> {{ $book->year }}</li>
             <li><strong>Stok:</strong> {{ $book->stock }}</li>
             <p><strong>Deskripsi:</strong><br>{{ $book->blurb }}</p>
-            @if (Auth::check() && auth()->user()->role === 'member')
+            @if (!Auth::check() || Auth::user()->role !== 'admin')
                 <div class="mt-4 d-grid">
                     <a href="{{ route('pinjam.create', $book) }}"
                         style="background-color: var(--primary-color); color: white;"
@@ -25,7 +25,7 @@
     </div>
 </div>
 
-@if (Auth::check() && auth()->user()->role === 'member')
+@if (!Auth::check() || Auth::user()->role !== 'admin')
     <hr class="my-4">
 
     <div class="row">

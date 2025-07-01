@@ -42,8 +42,8 @@
                     </form>
                 </div>
                 <div class="card-footer text-center py-3 border-0" style="background-color: white;">
-                    <div class="small">
-                        Belum punya akun? <a href="{{ route('register') }}">Daftar di sini</a>
+                    <div class="small" >
+                        Belum punya akun? <a href="{{ route('register') }}" style="color: var(--primary-color);">Daftar di sini</a>
                     </div>
                 </div>
             </div>
