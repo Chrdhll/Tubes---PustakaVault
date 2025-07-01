@@ -3,10 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\BooksController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\ReviewController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -28,7 +29,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/borrowings/{book}', [LoanController::class, 'store'])->name('loans.borrow');
     Route::put('/pinjaman-saya/{loan}/kembalikan', [LoanController::class, 'update'])->name('pinjam.return');
     Route::post('/books/{book}/reviews', [ReviewController::class, 'store'])
-     ->name('reviews.store');
+        ->name('reviews.store');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/password', [ProfileController::class, 'updatePassword'])->name('password.update');
 });
 
 Route::get('/login', [LoginController::class, 'create'])->name('login');

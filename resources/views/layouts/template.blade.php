@@ -146,10 +146,8 @@
                                 <hr class="dropdown-divider">
                             </li>
                             @if (Auth::check() && auth()->user()->role === 'member')
-                                <li><a class="dropdown-item" href="#"><i class="fas fa-user-circle me-2"></i> Profil
-                                        Saya</a></li>
-                                <li><a class="dropdown-item" href="#"><i class="fas fa-history me-2"></i> Riwayat
-                                        Pinjaman</a></li>
+                                <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Edit Profil</a>
+                                </li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
