@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\FadhilBooks;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BooksController extends Controller
 {
@@ -17,35 +18,38 @@ class BooksController extends Controller
 
     public function search(Request $request)
     {
-    $searchTerm = $request->query('query');
+        $searchTerm = $request->query('query');
 
-    $books = FadhilBooks::with('category') 
-        ->where(function ($q) use ($searchTerm) {
-            $q->where('title', 'like', "%$searchTerm%")
-              ->orWhere('author', 'like', "%$searchTerm%")
-              ->orWhereHas('category', function ($subQ) use ($searchTerm) {
-                  $subQ->where('name', 'like', "%$searchTerm%");
-              });
-        })
-        ->latest() 
-        ->paginate(6); 
+        $books = FadhilBooks::with('category')
+            ->where(function ($q) use ($searchTerm) {
+                $q->where('title', 'like', "%$searchTerm%")
+                    ->orWhere('author', 'like', "%$searchTerm%")
+                    ->orWhereHas('category', function ($subQ) use ($searchTerm) {
+                        $subQ->where('name', 'like', "%$searchTerm%");
+                    });
+            })
+            ->latest()
+            ->paginate(6);
 
-    return view('books.home', compact('books'));
+        return view('books.home', compact('books'));
     }
+
 
 
     public function detail($id)
     {
-        $book = FadhilBooks::with('category')->findOrFail($id);
-        return view('books.detail', compact('book'));
+        // Eager load relasi 'category' dan 'reviews' beserta 'user' dari setiap review
+        $book = FadhilBooks::with(['category', 'reviews.user'])->findOrFail($id);
+
+        // Cek apakah user yang sedang login sudah pernah mereview buku ini
+        $userHasReviewed = false;
+        if (Auth::check()) {
+            $userHasReviewed = $book->reviews()->where('user_id', Auth::id())->exists();
+        }
+
+        return view('books.detail', compact('book', 'userHasReviewed'));
     }
 
-
-    public function borrow($id)
-    {
-        $book = FadhilBooks::findOrFail($id);
-        return view('books.borrow', compact('book'));
-    }
 
     public function byCategory($id)
     {

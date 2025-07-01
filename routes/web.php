@@ -6,6 +6,7 @@ use App\Http\Controllers\BooksController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\ReviewController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -26,6 +27,9 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/borrowings/{book}', [LoanController::class, 'store'])->name('loans.borrow');
     Route::put('/pinjaman-saya/{loan}/kembalikan', [LoanController::class, 'update'])->name('pinjam.return');
+    Route::post('/books/{book}/reviews', [ReviewController::class, 'store'])
+     ->name('reviews.store')
+     ->middleware('auth');
 });
 
 Route::get('/login', [LoginController::class, 'create'])->name('login');

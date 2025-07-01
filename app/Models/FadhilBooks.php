@@ -43,6 +43,6 @@ class FadhilBooks extends Model
     // Satu Buku bisa memiliki banyak ulasan (reviews)
     public function reviews()
     {
-        return $this->hasMany(FadhilReview::class);
+        return $this->hasMany(FadhilReview::class, 'book_id');
     }
 }

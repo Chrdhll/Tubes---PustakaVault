@@ -130,6 +130,77 @@
                 $('#modalContent').html('Loading...');
             });
         });
+
+        $(document).on('submit', '#review-form', function(e) {
+            e.preventDefault(); // Mencegah form dikirim cara biasa
+
+            var form = $(this);
+            var url = form.attr('action');
+            var button = form.find('button[type="submit"]');
+            var originalButtonText = button.html();
+
+            // Tampilkan status loading di tombol
+            button.html(
+                '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
+                ).prop('disabled', true);
+            $('#review-errors').hide().html('');
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: form.serialize(), // Ambil semua data dari form
+                success: function(response) {
+                    if (response.success) {
+                        // Sembunyikan form
+                        form.fadeOut(function() {
+                            $(this).replaceWith(
+                                '<div class="alert alert-success"><i class="bi bi-check-circle-fill"></i> Anda sudah memberikan ulasan untuk buku ini.</div>'
+                                );
+                        });
+
+                        // Tambahkan review baru ke daftar review secara dinamis
+                        // Kita akan render view partialnya di sisi server
+                        var newReviewHtml = `
+                    <div class="d-flex mb-3">
+                        <div class="flex-shrink-0">
+                            <img src="https://ui-avatars.com/api/?name=${response.review.user.name}&background=random&color=fff" alt="Avatar" width="40" height="40" class="rounded-circle">
+                        </div>
+                        <div class="ms-3">
+                            <h6 class="mt-0 mb-1 fw-bold">${response.review.user.name}</h6>
+                            <div class="text-warning mb-1">
+                                ${'★'.repeat(response.review.rating)}${'☆'.repeat(5-response.review.rating)}
+                            </div>
+                            <p class="mb-1" style="font-size: 0.9rem;">${response.review.comment || ''}</p>
+                            <small class="text-muted">baru saja</small>
+                        </div>
+                    </div>
+                `;
+                        $('#review-list').prepend(newReviewHtml);
+                        $('#no-reviews-message').hide();
+
+                        // Update jumlah review
+                        var currentCount = parseInt($('#review-count').text());
+                        $('#review-count').text(currentCount + 1);
+                    }
+                },
+                error: function(xhr) {
+                    var errors = xhr.responseJSON.errors;
+                    var errorHtml = '<ul>';
+                    if (errors) {
+                        $.each(errors, function(key, value) {
+                            errorHtml += '<li>' + value[0] + '</li>';
+                        });
+                    } else {
+                        errorHtml += '<li>' + xhr.responseJSON.message + '</li>';
+                    }
+                    errorHtml += '</ul>';
+
+                    $('#review-errors').html(errorHtml).fadeIn();
+                    button.html(originalButtonText).prop('disabled',
+                    false); // Kembalikan tombol ke keadaan semula
+                }
+            });
+        });
     </script>
 
     <style>
