@@ -9,12 +9,16 @@ use App\Models\FadhilMember;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
+
 class LoanController extends Controller
 {
 
 
     public function index()
     {
+        if (Auth::user()->role !== 'member') {
+            abort(403, 'AKSI TIDAK DIIZINKAN.');
+        }
         $loans = FadhilLoan::where('user_id', Auth::id())
             ->with('book')
             ->latest()
@@ -25,6 +29,9 @@ class LoanController extends Controller
 
     public function create(FadhilBooks $book)
     {
+        if (Auth::user()->role !== 'member') {
+            abort(403, 'HANYA MEMBER YANG BISA MEMINJAM BUKU.');
+        }
         // Pengecekan stok lagi untuk keamanan
         if ($book->stock <= 0) {
             return redirect()->back()->with('error', 'Maaf, stok buku untuk dipinjam sudah habis!');
@@ -37,6 +44,10 @@ class LoanController extends Controller
     public function store(Request $request, FadhilBooks $book)
     {
 
+        if (Auth::user()->role !== 'member') {
+            abort(403, 'AKSI TIDAK DIIZINKAN.');
+        }
+
         $existingLoan = FadhilLoan::where('user_id', Auth::id())
             ->where('book_id', $book->id)
             ->where('status', 'borrowed')
@@ -45,7 +56,7 @@ class LoanController extends Controller
         if ($existingLoan) {
             return redirect()->back()->with('error', 'Anda sudah meminjam buku ini dan belum mengembalikannya.');
         }
-        
+
         if ($book->stock <= 0) {
             return redirect()->back()->with('error', 'Maaf, stok buku ini sudah habis!');
         }
@@ -66,6 +77,10 @@ class LoanController extends Controller
 
     public function update(Request $request, FadhilLoan $loan)
     {
+        if (Auth::user()->role !== 'member') {
+            abort(403, 'AKSI TIDAK DIIZINKAN.');
+        }
+
         if (Auth::id() !== $loan->user_id) {
             abort(403, 'AKSES DITOLAK'); // Hentikan proses jika bukan pemilik
         }

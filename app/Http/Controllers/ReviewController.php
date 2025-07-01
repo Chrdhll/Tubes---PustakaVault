@@ -12,6 +12,10 @@ class ReviewController extends Controller
 {
     public function store(Request $request, FadhilBooks $book)
     {
+        if (Auth::user()->role !== 'member') {
+            abort(403, 'AKSI TIDAK DIIZINKAN.');
+        }
+
         $validator = Validator::make($request->all(), [
             'rating' => ['required', 'integer', 'min:1', 'max:5'],
             'comment' => ['nullable', 'string', 'max:1000'],
@@ -41,7 +45,7 @@ class ReviewController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Terima kasih atas ulasan Anda!',
-            'review' => $review 
+            'review' => $review
         ]);
     }
 }

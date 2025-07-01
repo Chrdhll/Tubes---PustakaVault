@@ -116,7 +116,10 @@
             <div>
                 <a href="/" class="{{ Request::is('/') ? 'active' : '' }}">Buku</a>
                 <a href="/categories" class="{{ Request::is('categories*') ? 'active' : '' }}">Kategori</a>
-                <a href="{{ route('pinjam.index') }}" class="{{ Request::is('pinjam*') ? 'active' : '' }}">Pinjam Buku</a>
+                @if (Auth::check() && auth()->user()->role === 'member')
+                    <a href="{{ route('pinjam.index') }}" class="{{ Request::is('pinjam*') ? 'active' : '' }}">Pinjam
+                        Buku</a>
+                @endif
             </div>
 
             <div class="auth-buttons d-flex align-items-center gap-1">
@@ -142,13 +145,15 @@
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-user-circle me-2"></i> Profil
-                                    Saya</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-history me-2"></i> Riwayat
-                                    Pinjaman</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
+                            @if (Auth::check() && auth()->user()->role === 'member')
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-user-circle me-2"></i> Profil
+                                        Saya</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-history me-2"></i> Riwayat
+                                        Pinjaman</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                            @endif
                             <li>
                                 <form action="{{ route('logout') }}" method="POST"
                                     onsubmit="return confirm('Apakah Anda yakin ingin keluar?')">
