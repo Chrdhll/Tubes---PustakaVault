@@ -53,22 +53,31 @@ class FadhilLoanResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('book_id')
+                Tables\Columns\TextColumn::make('book.title')
+                    ->searchable()
+                    ->label('Book Title')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('user_id')
+                Tables\Columns\TextColumn::make('user.name')
+                    ->searchable()
+                    ->label('User Name')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('loan_date')
                     ->date()
+                    ->date('d M Y')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('due_date')
                     ->date()
+                    ->date('d M Y')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('return_date')
                     ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('status'),
+                Tables\Columns\TextColumn::make('status')->badge()->color(fn(string $state): string => match ($state) {
+                    'borrowed' => 'warning',
+                    'returned' => 'success',
+                }),
                 Tables\Columns\TextColumn::make('fine_amount')
                     ->numeric()
                     ->sortable(),
