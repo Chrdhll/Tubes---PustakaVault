@@ -28,8 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/borrowings/{book}', [LoanController::class, 'store'])->name('loans.borrow');
     Route::put('/pinjaman-saya/{loan}/kembalikan', [LoanController::class, 'update'])->name('pinjam.return');
     Route::post('/books/{book}/reviews', [ReviewController::class, 'store'])
-     ->name('reviews.store')
-     ->middleware('auth');
+     ->name('reviews.store');
 });
 
 Route::get('/login', [LoginController::class, 'create'])->name('login');
