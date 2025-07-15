@@ -5,8 +5,14 @@
     <div class="col-md-8">
         <h4>{{ $book->title }}</h4>
         <p class="text-muted mb-2">oleh {{ $book->author }}</p>
-        <span class="badge mb-3"
-            style="background-color: var(--secondary-color); color: var(--primary-color);">{{ $book->category->name ?? '-' }}</span>
+        <div class="mb-2">
+            @foreach ($book->categories as $category)
+                <a href="{{ route('books.category', $category->id) }}" class="badge rounded-pill text-decoration-none"
+                    style="background-color: var(--secondary-color); color: var(--primary-color);">
+                    {{ $category->name }}
+                </a>
+            @endforeach
+        </div>
         <ul class="list-unstyled">
             <li><strong>Penerbit:</strong> {{ $book->publisher }}</li>
             <li><strong>Tahun:</strong> {{ $book->year }}</li>
@@ -31,11 +37,12 @@
     <div class="row">
         <div class="col-md-7">
             @auth
-                @if ($userHasReviewed)
+                @if ($user_has_reviewed)
                     <div class="alert alert-success"
-                        style="background-color: var(--secondary-color); color: var(--primary-color);"><i
-                            class="bi bi-check-circle-fill"></i> Anda sudah memberikan ulasan untuk buku ini.</div>
-                @else
+                        style="background-color: var(--secondary-color); color: var(--primary-color);">
+                        <i class="bi bi-check-circle-fill"></i> Anda sudah memberikan ulasan untuk buku ini.
+                    </div>
+                @elseif ($user_can_review)
                     <h5 class="mb-3">Tulis Ulasan Anda</h5>
                     <form id="review-form" action="{{ route('reviews.store', $book->id) }}" method="POST">
                         @csrf
@@ -56,11 +63,17 @@
                             <textarea class="form-control" id="comment" name="comment" rows="3" placeholder="Bagaimana pendapatmu?"
                                 style="background-color: white; border-color: var(--primary-color); color: var(--primary-color);"></textarea>
                         </div>
-                        <button type="submit" class="btn text-white"
-                            style="background-color: var(--primary-color); color: var(--white-color);">Kirim Ulasan</button>
+                        <button type="submit" class="btn text-white" style="background-color: var(--primary-color);">Kirim
+                            Ulasan</button>
                     </form>
+                @else
+                    <div class="alert alert-secondary" role="alert">
+                        Anda harus meminjam dan menyelesaikan peminjaman buku ini terlebih dahulu untuk dapat memberikan
+                        ulasan.
+                    </div>
                 @endif
             @endauth
+
             @guest
                 <div class="alert alert-secondary" role="alert"
                     style="background-color: var(--secondary-color); color: var(--white-color);"><a
@@ -75,7 +88,7 @@
                 @forelse ($book->reviews as $review)
                     @include('books.single-review', ['review' => $review])
                 @empty
-                    <p id="no-reviews-message">Belum ada ulasan. Jadilah yang pertama!</p>
+                    <p id="no-reviews-message">Belum ada ulasan.</p>
                 @endforelse
             </div>
         </div>

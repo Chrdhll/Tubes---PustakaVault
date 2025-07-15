@@ -15,8 +15,8 @@ use App\Http\Controllers\Auth\RegisterController;
 
 Route::get('/', [BooksController::class, 'index'])->name('books.index');
 Route::get('/books/search', [BooksController::class, 'search'])->name('books.search');
-Route::get('/books/{id}/detail', [BooksController::class, 'detail'])->name('books.detail');
-
+Route::get('/books/{book}/detail', [BooksController::class, 'detail'])->name('books.detail');
+Route::get('/books/{book}/detail-page', [BooksController::class, 'showDetailPage'])->name('books.detail_page');
 
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
 Route::get('/categories/{id}', [CategoryController::class, 'show'])->name('books.category');

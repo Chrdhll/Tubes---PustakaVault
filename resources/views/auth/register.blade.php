@@ -58,7 +58,7 @@
                 </div>
                 <div class="card-footer text-center py-3 border-0" style="background-color: white;">
                     <div class="small">
-                        Sudah punya akun? <a href="{{ route('login') }}">Login di sini</a>
+                        Sudah punya akun? <a href="{{ route('login') }}" style="color: var(--primary-color);">Login di sini</a>
                     </div>
                 </div>
             </div>

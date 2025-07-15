@@ -40,7 +40,11 @@ class FadhilLoanResource extends Resource
                 Forms\Components\DatePicker::make('due_date')
                     ->required(),
                 Forms\Components\DatePicker::make('return_date'),
-                Forms\Components\TextInput::make('status')
+                Forms\Components\Select::make('status')
+                    ->options([
+                        'borrowed' => 'Dipinjam',
+                        'returned' => 'Dikembalikan',
+                    ])
                     ->required(),
                 Forms\Components\TextInput::make('fine_amount')
                     ->required()
@@ -78,8 +82,11 @@ class FadhilLoanResource extends Resource
                     'borrowed' => 'warning',
                     'returned' => 'success',
                 }),
-                Tables\Columns\TextColumn::make('fine_amount')
+                Tables\Columns\TextColumn::make('current_fine') // Panggil nama accessor (tanpa get...Attribute)
+                    ->label('Denda Saat Ini')
                     ->numeric()
+                    ->default(0.00)
+                    ->prefix('Rp')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -96,6 +103,7 @@ class FadhilLoanResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
+            ->defaultSort('created_at', 'desc')
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),

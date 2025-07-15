@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class FadhilLoan extends Model
 {
     use HasFactory;
-    
+
     protected $table = 'fadhil_loans';
 
     protected $fillable = [
@@ -44,7 +44,6 @@ class FadhilLoan extends Model
             return 0; // Jika tidak telat, tidak ada denda
         }
 
-        // Hitung selisih hari antara hari ini dengan tanggal jatuh tempo
         $overdueDays = Carbon::now()->diffInDays($this->due_date);
 
         // Aturan denda: Rp 1.000 per hari keterlambatan
@@ -52,5 +51,4 @@ class FadhilLoan extends Model
 
         return $overdueDays * $finePerDay;
     }
-    
 }

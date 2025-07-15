@@ -20,7 +20,6 @@ class FadhilBooks extends Model
         'stock',
         'image',
         'year',
-        'category_id',
     ];
 
     protected static function booted()
@@ -32,9 +31,9 @@ class FadhilBooks extends Model
         });
     }
 
-    public function category()
+    public function categories()
     {
-        return $this->belongsTo(FadhilCategory::class, 'category_id');
+        return $this->belongsToMany(FadhilCategory::class, 'fadhil_book_category', 'fadhil_books_id', 'fadhil_category_id');
     }
 
     // Satu Buku bisa memiliki banyak peminjaman (loans)

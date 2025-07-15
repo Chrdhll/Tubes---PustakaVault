@@ -90,7 +90,13 @@ class LoanController extends Controller
         $loan->save();
 
         $loan->book->increment('stock');
+        $successMessage = "Buku '{$loan->book->title}' berhasil dikembalikan. Terima kasih!";
 
-        return redirect()->route('pinjam.index')->with('success', 'Buku berhasil dikembalikan. Terima kasih!');
+        return redirect()->route('pinjam.index')
+            ->with('success', $successMessage)
+            ->with('show_review_prompt', [
+                'book_title' => $loan->book->title,
+                'detail_url' => route('books.detail_page', $loan->book->id)
+            ]);
     }
 }

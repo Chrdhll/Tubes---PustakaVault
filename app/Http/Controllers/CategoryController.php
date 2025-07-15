@@ -18,7 +18,7 @@ class CategoryController extends Controller
     public function show($id)
     {
         $category = FadhilCategory::findOrFail($id);
-        $books = FadhilBooks::where('category_id', $id)->paginate(6);
+        $books = $category->books()->latest()->paginate(6);
         return view('books.home', compact('books', 'category'));
     }
 }

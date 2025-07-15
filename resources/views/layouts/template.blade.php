@@ -93,8 +93,209 @@
             margin-top: 4rem;
         }
 
+        .hero-background-section {
+            position: relative;
+            width: 100vw;
+            margin-left: calc(-50vw + 50%);
+            height: 400px;
+            background: url('{{ asset('storage/banners/background_foto_2.jpg') }}') center/cover no-repeat;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 3rem;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        /* Base overlay - transparan di awal */
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg,
+                    rgba(var(--primary-color-rgb, 139, 92, 246), 0.1),
+                    rgba(var(--secondary-color-rgb, 236, 72, 153), 0.1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.5s ease;
+        }
+
+        /* Overlay saat hover/focus */
+        .hero-background-section:hover .hero-overlay,
+        .hero-background-section:focus .hero-overlay {
+            background: linear-gradient(135deg,
+                    rgba(var(--primary-color-rgb, 139, 92, 246), 0.3),
+                    rgba(var(--secondary-color-rgb, 236, 72, 153), 0.3));
+        }
+
+        /* Dark overlay untuk readability text */
+        .hero-overlay::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.2);
+            transition: opacity 0.5s ease;
+        }
+
+        .hero-background-section:hover .hero-overlay::before,
+        .hero-background-section:focus .hero-overlay::before {
+            opacity: 0.4;
+        }
+
+        .hero-content {
+            text-align: center;
+            color: white;
+            max-width: 800px;
+            padding: 0 2rem;
+            animation: fadeInUp 1s ease-out;
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+
+        .hero-background-section:hover .hero-content,
+        .hero-background-section:focus .hero-content {
+            transform: translateY(-10px);
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            line-height: 1.6;
+            opacity: 0.9;
+            transition: all 0.3s ease;
+        }
+
+        .hero-background-section:hover .hero-subtitle,
+        .hero-background-section:focus .hero-subtitle {
+            opacity: 1;
+            font-weight: 400;
+        }
+
+        .hero-features {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            opacity: 0.7;
+            transition: all 0.5s ease;
+        }
+
+        .hero-background-section:hover .hero-features,
+        .hero-background-section:focus .hero-features {
+            opacity: 1;
+            transform: translateY(-5px);
+        }
+
+        .feature-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            transform: translateY(0);
+        }
+
+        .hero-background-section:hover .feature-item,
+        .hero-background-section:focus .feature-item {
+            transform: translateY(-8px);
+        }
+
+        .feature-item:hover {
+            transform: translateY(-12px) scale(1.05);
+        }
+
+        .feature-item i {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            transition: all 0.3s ease;
+        }
+
+        .hero-background-section:hover .feature-item i,
+        .hero-background-section:focus .feature-item i {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        /* Animasi */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Parallax effect untuk desktop */
+        @media (min-width: 768px) {
+            .hero-background-section {
+                background-attachment: fixed;
+            }
+        }
+
+        /* Responsive untuk mobile */
+        @media (max-width: 768px) {
+            .hero-background-section {
+                height: 300px;
+                background-attachment: scroll;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .hero-features {
+                gap: 2rem;
+            }
+
+            .feature-item {
+                font-size: 0.8rem;
+            }
+
+            .feature-item i {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-background-section {
+                height: 250px;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .hero-features {
+                gap: 1.5rem;
+            }
+        }
+
         .active {
             color: var(--primary-color) !important;
+        }
+
+        .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(75, 0, 130, 0.25);
         }
     </style>
 </head>

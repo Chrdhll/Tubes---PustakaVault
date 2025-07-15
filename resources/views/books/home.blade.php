@@ -2,12 +2,35 @@
 @section('title', 'PustakaVault')
 
 @section('content')
-    <div class="container py-5">
+    <div class="container">
+
+        <div class="hero-background-section demo" tabindex="0">
+            <div class="hero-overlay">
+                <div class="hero-content">
+                    <p class="hero-subtitle">Temukan buku terbaik untuk menambah wawasan Anda</p>
+                    <div class="hero-features">
+                        <div class="feature-item">
+                            <i class="bi bi-book-fill"></i>
+                            <span>Koleksi Lengkap</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="bi bi-clock-fill"></i>
+                            <span>Tersedia 24/7</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="bi bi-star-fill"></i>
+                            <span>Berkualitas Tinggi</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <h1 class="mb-3 text-center display-5 fw-bold " style="color: var(--black-color);">
             {{ isset($category) ? 'Kategori : ' . $category->name : 'Koleksi Buku PustakaVault' }}
         </h1>
 
-        <p class="lead text-muted text-center mb-5">Temukan buku terbaik untuk menambah wawasan Anda</p>
+
 
         {{-- Search Form --}}
         <form action="{{ route('books.search') }}" method="GET" class="d-flex justify-content-center mb-5">
@@ -49,14 +72,17 @@
                                     </div>
                                 </div>
 
-                                {{-- Kategori --}}
-                                @if ($book->category)
-                                    <a href="{{ route('books.category', $book->category->id) }}"
-                                        class="badge rounded-pill text-decoration-none"
-                                        style="background-color: var(--secondary-color); color: var(--primary-color); font-size: 0.75rem;">
-                                        {{ $book->category->name }}
-                                    </a>
-                                @endif
+                                {{-- kategori --}}
+                                <div class="d-flex flex-wrap gap-1">
+                                    @foreach ($book->categories as $category)
+                                        <a href="{{ route('books.category', $category->id) }}"
+                                            class="badge rounded-pill text-decoration-none"
+                                            style="background-color: var(--secondary-color); color: var(--primary-color); font-size: 0.7rem;">
+                                            {{ $category->name }}
+                                        </a>
+                                    @endforeach
+
+                                </div>
                             </div>
 
                             {{-- Tombol --}}
@@ -69,11 +95,11 @@
                                     <i class="bi bi-info-circle me-1"></i> Detail
                                 </button>
                                 @if (!Auth::check() || Auth::user()->role !== 'admin')
-                                <a href="{{ route('pinjam.create', $book) }}"
-                                    class="btn text-white btn-sm w-100 {{ $book->stock <= 0 ? 'disabled' : '' }}"
-                                    style="background-color: var(--primary-color);">
-                                    <i class="bi bi-bookmark-plus me-1"></i> Pinjam
-                                </a>
+                                    <a href="{{ route('pinjam.create', $book) }}"
+                                        class="btn text-white btn-sm w-100 {{ $book->stock <= 0 ? 'disabled' : '' }}"
+                                        style="background-color: var(--primary-color);">
+                                        <i class="bi bi-bookmark-plus me-1"></i> Pinjam
+                                    </a>
                                 @endif
                             </div>
                         </div>
@@ -144,7 +170,7 @@
             // Tampilkan status loading di tombol
             button.html(
                 '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
-                ).prop('disabled', true);
+            ).prop('disabled', true);
             $('#review-errors').hide().html('');
 
             $.ajax({
@@ -157,7 +183,7 @@
                         form.fadeOut(function() {
                             $(this).replaceWith(
                                 '<div class="alert alert-success"><i class="bi bi-check-circle-fill"></i> Anda sudah memberikan ulasan untuk buku ini.</div>'
-                                );
+                            );
                         });
 
                         // Tambahkan review baru ke daftar review secara dinamis
@@ -199,7 +225,7 @@
 
                     $('#review-errors').html(errorHtml).fadeIn();
                     button.html(originalButtonText).prop('disabled',
-                    false); // Kembalikan tombol ke keadaan semula
+                        false); // Kembalikan tombol ke keadaan semula
                 }
             });
         });

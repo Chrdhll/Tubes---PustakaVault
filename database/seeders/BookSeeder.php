@@ -14,12 +14,12 @@ class BookSeeder extends Seeder
      */
     public function run(): void
     {
-        $categoryIds = FadhilCategory::pluck('id');
-
-        FadhilBooks::factory()->count(50)->create([
-            'category_id' => function () use ($categoryIds) {
-                return $categoryIds->random();
-            }
-        ]);
+        $categories = \App\Models\FadhilCategory::all();
+        FadhilBooks::factory()->count(50)->create()->each(function ($book) use ($categories) {
+            
+            $book->categories()->attach(
+                $categories->random(rand(1, 3))->pluck('id')->toArray()
+            );
+        });
     }
 }

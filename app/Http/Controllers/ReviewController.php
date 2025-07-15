@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\FadhilBooks;
+use App\Models\FadhilLoan;
 use App\Models\FadhilReview;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,6 +13,20 @@ class ReviewController extends Controller
 {
     public function store(Request $request, FadhilBooks $book)
     {
+        // Cek dulu apakah user ini pernah meminjam buku ini
+        $hasBorrowed = FadhilLoan::where('user_id', Auth::id())
+            ->where('book_id', $book->id)
+            ->where('status', 'returned')
+            ->exists();
+
+        if (!$hasBorrowed) {
+            // Jika tidak ada riwayat pinjaman, tolak dengan error 403 (Forbidden)
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda harus meminjam buku ini terlebih dahulu untuk memberi ulasan.'
+            ], 403);
+        }
+
         if (Auth::user()->role !== 'member') {
             abort(403, 'AKSI TIDAK DIIZINKAN.');
         }

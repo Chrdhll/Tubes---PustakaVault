@@ -14,6 +14,6 @@ class FadhilCategory extends Model
 
     public function books()
     {
-        return $this->hasMany(FadhilBooks::class, 'category_id');
+        return $this->belongsToMany(\App\Models\FadhilBooks::class, 'fadhil_book_category', 'fadhil_category_id', 'fadhil_books_id');
     }
 }

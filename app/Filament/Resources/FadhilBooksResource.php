@@ -59,9 +59,12 @@ class FadhilBooksResource extends Resource
 
                 Forms\Components\TextInput::make('year')
                     ->required(),
-                Forms\Components\select::make('category_id')
-                    ->relationship('category', 'name')
+                Forms\Components\select::make('categories')
+                    ->multiple()
+                    ->relationship(name: 'categories', titleAttribute: 'name')
                     ->label('Category')
+                    ->preload()
+                    ->searchable()
                     ->required()
             ]);
     }

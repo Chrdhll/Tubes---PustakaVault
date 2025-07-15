@@ -56,8 +56,7 @@
                                                         </div>
                                                     @endif
 
-                                                    <form action="{{ route('pinjam.return', $loan) }}" method="POST"
-                                                       >
+                                                    <form action="{{ route('pinjam.return', $loan) }}" method="POST">
                                                         @csrf
                                                         @method('PUT')
                                                         <button type="submit"
@@ -80,5 +79,46 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="reviewPromptModal" tabindex="-1" aria-labelledby="reviewPromptModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="reviewPromptModalLabel">Berikan Ulasanmu!</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Terima kasih telah membaca buku <strong id="prompt-book-title"></strong>. Apakah Anda ingin
+                            memberikan ulasan untuk buku ini sekarang?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Nanti Saja</button>
+                        <a href="#" id="prompt-review-button" class="btn" style="background-color: var(--primary-color); color: white;">Ya, Beri Ulasan</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    @if (session('show_review_prompt'))
+        <script>
+            // Jalankan script setelah semua konten halaman dimuat
+            document.addEventListener('DOMContentLoaded', function() {
+                // Ambil data dari sesi yang dikirim oleh controller
+                const promptData = @json(session('show_review_prompt'));
+
+                // Siapkan modal Bootstrap
+                const promptModal = new bootstrap.Modal(document.getElementById('reviewPromptModal'));
+
+                // Isi judul buku di dalam modal
+                document.getElementById('prompt-book-title').textContent = promptData.book_title;
+
+                // Atur URL untuk tombol "Beri Ulasan"
+                document.getElementById('prompt-review-button').href = promptData.detail_url;
+
+                // Tampilkan modalnya!
+                promptModal.show();
+            });
+        </script>
+    @endif
 @endsection
